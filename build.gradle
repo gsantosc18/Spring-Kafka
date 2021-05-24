@@ -1,0 +1,40 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id "com.commercehub.gradle.plugin.avro" version "0.9.0"
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url "http://packages.confluent.io/maven/"
+    }
+}
+
+dependencies {
+    compile "org.apache.avro:avro:1.8.1"
+    compile('io.confluent:kafka-avro-serializer:3.2.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    }
+    implementation group: 'org.apache.avro', name: 'avro-maven-plugin', version: '1.10.2'
+    implementation group: 'org.apache.avro', name: 'avro-compiler', version: '1.10.2'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+}
+
+avro {
+    createSetters = false
+    fieldVisibility = "PRIVATE"
+}
+
+test {
+    useJUnitPlatform()
+}
